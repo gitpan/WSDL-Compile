@@ -1,0 +1,437 @@
+
+** operations **
+CreateCustomer
+
+** elements **
+{http://localhost/Example}ArrayOfContacts
+{http://localhost/Example}ArrayOfCustomerID
+{http://localhost/Example}ArrayOfCustomerType
+{http://localhost/Example}Contact
+{http://localhost/Example}Contacts
+{http://localhost/Example}CreateCustomer
+{http://localhost/Example}CreateCustomerFault
+{http://localhost/Example}CreateCustomerResponse
+{http://schemas.xmlsoap.org/wsdl/soap/}address
+{http://schemas.xmlsoap.org/wsdl/soap/}binding
+{http://schemas.xmlsoap.org/wsdl/soap/}body
+{http://schemas.xmlsoap.org/wsdl/soap/}fault
+{http://schemas.xmlsoap.org/wsdl/soap/}header
+{http://schemas.xmlsoap.org/wsdl/soap/}headerfault
+{http://schemas.xmlsoap.org/wsdl/soap/}operation
+{http://schemas.xmlsoap.org/wsdl/}definitions
+
+** templates for http://localhost/Example **
+======================
+{http://localhost/Example}ArrayOfContacts
+PERL
+# BE WARNED: in most cases, the example below cannot be used without
+# interpretation.  The comments will guide you.
+# Produced by XML::Compile::Translate::Template version 1.07
+#          on Tue Nov 24 21:39:12 2009
+#
+# xmlns:          http://localhost/Example
+
+{ # sequence of Contacts
+
+  # is optional
+  Contacts =>
+  { # sequence of Street, City, County
+
+    # is a {http://www.w3.org/2001/XMLSchema}string
+    # is optional
+    Street => "example",
+
+    # is a {http://www.w3.org/2001/XMLSchema}string
+    City => "example",
+
+    # is a {http://www.w3.org/2001/XMLSchema}string
+    # is optional
+    County => "example", }, }
+
+XML
+<ArrayOfContacts xmlns="http://localhost/Example">
+  <!-- BE WARNED: in most cases, the example below cannot be used without
+    -- interpretation.  The comments will guide you.
+    -- Produced by XML::Compile::Translate::Template version 1.07
+    --          on Tue Nov 24 21:39:12 2009
+    -->
+  <!-- sequence of Contacts -->
+  <Contacts>
+    <!-- is optional -->
+    <!-- sequence of Street, City, County -->
+    <Street type="string">
+      <!-- is optional -->
+      example
+    </Street>
+    <City type="string">example</City>
+    <County type="string">
+      <!-- is optional -->
+      example
+    </County>
+  </Contacts>
+</ArrayOfContacts>
+
+======================
+{http://localhost/Example}ArrayOfCustomerID
+PERL
+# BE WARNED: in most cases, the example below cannot be used without
+# interpretation.  The comments will guide you.
+# Produced by XML::Compile::Translate::Template version 1.07
+#          on Tue Nov 24 21:39:12 2009
+#
+# xmlns:          http://localhost/Example
+
+{ # sequence of CustomerID
+
+  # is a {http://www.w3.org/2001/XMLSchema}string
+  # is optional
+  CustomerID => "example", }
+
+XML
+<ArrayOfCustomerID xmlns="http://localhost/Example">
+  <!-- BE WARNED: in most cases, the example below cannot be used without
+    -- interpretation.  The comments will guide you.
+    -- Produced by XML::Compile::Translate::Template version 1.07
+    --          on Tue Nov 24 21:39:12 2009
+    -->
+  <!-- sequence of CustomerID -->
+  <CustomerID type="string">
+    <!-- is optional -->
+    example
+  </CustomerID>
+</ArrayOfCustomerID>
+
+======================
+{http://localhost/Example}ArrayOfCustomerType
+PERL
+# BE WARNED: in most cases, the example below cannot be used without
+# interpretation.  The comments will guide you.
+# Produced by XML::Compile::Translate::Template version 1.07
+#          on Tue Nov 24 21:39:12 2009
+#
+# xmlns:          http://localhost/Example
+
+{ # sequence of CustomerType
+
+  # is a {http://www.w3.org/2001/XMLSchema}string
+  # is optional
+  CustomerType => "example", }
+
+XML
+<ArrayOfCustomerType xmlns="http://localhost/Example">
+  <!-- BE WARNED: in most cases, the example below cannot be used without
+    -- interpretation.  The comments will guide you.
+    -- Produced by XML::Compile::Translate::Template version 1.07
+    --          on Tue Nov 24 21:39:12 2009
+    -->
+  <!-- sequence of CustomerType -->
+  <CustomerType type="string">
+    <!-- is optional -->
+    example
+  </CustomerType>
+</ArrayOfCustomerType>
+
+======================
+{http://localhost/Example}Contact
+PERL
+# BE WARNED: in most cases, the example below cannot be used without
+# interpretation.  The comments will guide you.
+# Produced by XML::Compile::Translate::Template version 1.07
+#          on Tue Nov 24 21:39:12 2009
+#
+# xmlns:          http://localhost/Example
+
+{ # sequence of Street, City, County
+
+  # is a {http://www.w3.org/2001/XMLSchema}string
+  # is optional
+  Street => "example",
+
+  # is a {http://www.w3.org/2001/XMLSchema}string
+  City => "example",
+
+  # is a {http://www.w3.org/2001/XMLSchema}string
+  # is optional
+  County => "example", }
+
+XML
+<Contact xmlns="http://localhost/Example">
+  <!-- BE WARNED: in most cases, the example below cannot be used without
+    -- interpretation.  The comments will guide you.
+    -- Produced by XML::Compile::Translate::Template version 1.07
+    --          on Tue Nov 24 21:39:12 2009
+    -->
+  <!-- sequence of Street, City, County -->
+  <Street type="string">
+    <!-- is optional -->
+    example
+  </Street>
+  <City type="string">example</City>
+  <County type="string">
+    <!-- is optional -->
+    example
+  </County>
+</Contact>
+
+======================
+{http://localhost/Example}Contacts
+PERL
+# BE WARNED: in most cases, the example below cannot be used without
+# interpretation.  The comments will guide you.
+# Produced by XML::Compile::Translate::Template version 1.07
+#          on Tue Nov 24 21:39:12 2009
+#
+# xmlns:          http://localhost/Example
+
+{ # sequence of Street, City, County
+
+  # is a {http://www.w3.org/2001/XMLSchema}string
+  # is optional
+  Street => "example",
+
+  # is a {http://www.w3.org/2001/XMLSchema}string
+  City => "example",
+
+  # is a {http://www.w3.org/2001/XMLSchema}string
+  # is optional
+  County => "example", }
+
+XML
+<Contacts xmlns="http://localhost/Example">
+  <!-- BE WARNED: in most cases, the example below cannot be used without
+    -- interpretation.  The comments will guide you.
+    -- Produced by XML::Compile::Translate::Template version 1.07
+    --          on Tue Nov 24 21:39:12 2009
+    -->
+  <!-- sequence of Street, City, County -->
+  <Street type="string">
+    <!-- is optional -->
+    example
+  </Street>
+  <City type="string">example</City>
+  <County type="string">
+    <!-- is optional -->
+    example
+  </County>
+</Contacts>
+
+======================
+{http://localhost/Example}CreateCustomer
+PERL
+# BE WARNED: in most cases, the example below cannot be used without
+# interpretation.  The comments will guide you.
+# Produced by XML::Compile::Translate::Template version 1.07
+#          on Tue Nov 24 21:39:12 2009
+#
+# xmlns:          http://localhost/Example
+
+{ # sequence of TemplateCode, ArrayOfCustomerID,
+  #   ArrayOfCustomerType, Title, Contact, ArrayOfContacts,
+  #   BuildingNumber
+
+  # is a {http://www.w3.org/2001/XMLSchema}string
+  TemplateCode => "example",
+
+  # occurs any number of times
+  ArrayOfCustomerID =>
+  [ { # sequence of CustomerID
+
+      # is a {http://www.w3.org/2001/XMLSchema}string
+      # is optional
+      CustomerID => "example", }, ],
+
+  # occurs any number of times
+  ArrayOfCustomerType =>
+  [ { # sequence of CustomerType
+
+      # is a {http://www.w3.org/2001/XMLSchema}string
+      # is optional
+      CustomerType => "example", }, ],
+
+  # is a {http://www.w3.org/2001/XMLSchema}string
+  # is optional
+  Title => "example",
+
+  # is optional
+  Contact =>
+  { # sequence of Street, City, County
+
+    # is a {http://www.w3.org/2001/XMLSchema}string
+    # is optional
+    Street => "example",
+
+    # is a {http://www.w3.org/2001/XMLSchema}string
+    City => "example",
+
+    # is a {http://www.w3.org/2001/XMLSchema}string
+    # is optional
+    County => "example", },
+
+  # occurs any number of times
+  ArrayOfContacts =>
+  [ { # sequence of Contacts
+
+      # is optional
+      Contacts =>
+      { # sequence of Street, City, County
+
+        # is a {http://www.w3.org/2001/XMLSchema}string
+        # is optional
+        Street => "example",
+
+        # is a {http://www.w3.org/2001/XMLSchema}string
+        City => "example",
+
+        # is a {http://www.w3.org/2001/XMLSchema}string
+        # is optional
+        County => "example", }, }, ],
+
+  # is a {http://www.w3.org/2001/XMLSchema}int
+  # is optional
+  BuildingNumber => 42, }
+
+XML
+<CreateCustomer xmlns="http://localhost/Example">
+  <!-- BE WARNED: in most cases, the example below cannot be used without
+    -- interpretation.  The comments will guide you.
+    -- Produced by XML::Compile::Translate::Template version 1.07
+    --          on Tue Nov 24 21:39:12 2009
+    -->
+  <!-- sequence of TemplateCode, ArrayOfCustomerID,
+         ArrayOfCustomerType, Title, Contact, ArrayOfContacts,
+         BuildingNumber -->
+  <TemplateCode type="string">example</TemplateCode>
+  <ArrayOfCustomerID>
+    <!-- occurs any number of times -->
+    <!-- sequence of CustomerID -->
+    <CustomerID type="string">
+      <!-- is optional -->
+      example
+    </CustomerID>
+  </ArrayOfCustomerID>
+  <ArrayOfCustomerType>
+    <!-- occurs any number of times -->
+    <!-- sequence of CustomerType -->
+    <CustomerType type="string">
+      <!-- is optional -->
+      example
+    </CustomerType>
+  </ArrayOfCustomerType>
+  <Title type="string">
+    <!-- is optional -->
+    example
+  </Title>
+  <Contact>
+    <!-- is optional -->
+    <!-- sequence of Street, City, County -->
+    <Street type="string">
+      <!-- is optional -->
+      example
+    </Street>
+    <City type="string">example</City>
+    <County type="string">
+      <!-- is optional -->
+      example
+    </County>
+  </Contact>
+  <ArrayOfContacts>
+    <!-- occurs any number of times -->
+    <!-- sequence of Contacts -->
+    <Contacts>
+      <!-- is optional -->
+      <!-- sequence of Street, City, County -->
+      <Street type="string">
+        <!-- is optional -->
+        example
+      </Street>
+      <City type="string">example</City>
+      <County type="string">
+        <!-- is optional -->
+        example
+      </County>
+    </Contacts>
+  </ArrayOfContacts>
+  <BuildingNumber type="int">
+    <!-- is optional -->
+    42
+  </BuildingNumber>
+</CreateCustomer>
+
+======================
+{http://localhost/Example}CreateCustomerFault
+PERL
+# BE WARNED: in most cases, the example below cannot be used without
+# interpretation.  The comments will guide you.
+# Produced by XML::Compile::Translate::Template version 1.07
+#          on Tue Nov 24 21:39:12 2009
+#
+# xmlns:          http://localhost/Example
+
+{ # sequence of createcustomer
+  createcustomer =>
+  { # sequence of CustomerID
+
+    # is a {http://www.w3.org/2001/XMLSchema}string
+    # is optional
+    CustomerID => "example", }, }
+
+XML
+<CreateCustomerFault xmlns="http://localhost/Example">
+  <!-- BE WARNED: in most cases, the example below cannot be used without
+    -- interpretation.  The comments will guide you.
+    -- Produced by XML::Compile::Translate::Template version 1.07
+    --          on Tue Nov 24 21:39:12 2009
+    -->
+  <!-- sequence of createcustomer -->
+  <createcustomer>
+    <!-- sequence of CustomerID -->
+    <CustomerID type="string">
+      <!-- is optional -->
+      example
+    </CustomerID>
+  </createcustomer>
+</CreateCustomerFault>
+
+======================
+{http://localhost/Example}CreateCustomerResponse
+PERL
+# BE WARNED: in most cases, the example below cannot be used without
+# interpretation.  The comments will guide you.
+# Produced by XML::Compile::Translate::Template version 1.07
+#          on Tue Nov 24 21:39:12 2009
+#
+# xmlns:          http://localhost/Example
+
+{ # sequence of createcustomer
+  createcustomer =>
+  { # sequence of ArrayOfCustomerID
+
+    # occurs any number of times
+    ArrayOfCustomerID =>
+    [ { # sequence of CustomerID
+
+        # is a {http://www.w3.org/2001/XMLSchema}string
+        # is optional
+        CustomerID => "example", }, ], }, }
+
+XML
+<CreateCustomerResponse xmlns="http://localhost/Example">
+  <!-- BE WARNED: in most cases, the example below cannot be used without
+    -- interpretation.  The comments will guide you.
+    -- Produced by XML::Compile::Translate::Template version 1.07
+    --          on Tue Nov 24 21:39:12 2009
+    -->
+  <!-- sequence of createcustomer -->
+  <createcustomer>
+    <!-- sequence of ArrayOfCustomerID -->
+    <ArrayOfCustomerID>
+      <!-- occurs any number of times -->
+      <!-- sequence of CustomerID -->
+      <CustomerID type="string">
+        <!-- is optional -->
+        example
+      </CustomerID>
+    </ArrayOfCustomerID>
+  </createcustomer>
+</CreateCustomerResponse>
+
