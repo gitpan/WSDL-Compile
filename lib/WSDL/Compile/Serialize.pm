@@ -1,17 +1,85 @@
 package WSDL::Compile::Serialize;
 
-=encoding utf-8
+=encoding utf8
 
 =head1 NAME
 
 WSDL::Compile::Serialize - serialize to and from class for
 L<XML::Compile::SOAP::Client>
 
+=head1 SYNOPSIS
+
+    use strict;
+    use warnings;
+
+    use XML::Compile::WSDL11;
+    use XML::Compile::SOAP11;
+    use XML::Compile::Transport::SOAPHTTP;
+
+    use WSDL::Compile::Serialize;
+
+    use Example::Op::CreateCustomer::Request;
+    use Example::Op::CreateCustomer::Response;
+    use Example::CT::Contact;
+
+    my $s              = WSDL::Compile::Serialize->new();
+    my $request_class  = 'Example::Op::CreateCustomer::Request';
+    my $response_class = 'Example::Op::CreateCustomer::Response';
+    my $contact_class  = 'Example::CT::Contact';
+
+    my $req = $request_class->new(
+       'TemplateCode' => 'example',
+       'Contact'      => $contact_class->new(
+           'Street' => 'example',
+           'County' => 'example',
+           'City'   => 'example'
+       ),
+       'CustomerID' => [ 'example', 'example' ],
+       'Contacts'   => [
+           $contact_class->new(
+               'Street' => 'example',
+               'County' => 'example',
+               'City'   => undef
+           ),
+           $contact_class->new(
+               'Street' => 'example',
+               'County' => 'example',
+               'City'   => 'example'
+           ),
+       ],
+       'BuildingNumber' => undef,
+       'CustomerType'   => ['example', undef, 'example2'],
+    );
+
+
+    my $wsdl = XML::Compile::WSDL11->new('Example.wsdl');
+
+    my $call = $wsdl->compileClient('CreateCustomer');
+
+    # turn object into hashref
+    my $call_request = $s->for_xml( $req );
+
+    my $answer = $call->( %$call_request );
+
+    # turn hashref into class args
+    my $res_args = $s->for_class( $response_class, $answer );
+
+    my $res = Example::Op::CreateCustomer::Response->new(
+        %$res_args
+    );
+
+
+This allows developers to work with classes instead of building the hashrefs.
+Those (Request|Response|Fault)$ classes could have their own methods,
+triggers, extended validation etc.
+
+Please take a look at example/ directory for more details.
+
 =cut
 
 use Moose;
 
-our $VERSION = '0.01_1';
+our $VERSION = '0.02';
 
 use MooseX::Params::Validate qw( pos_validated_list );
 use WSDL::Compile::Utils qw( wsdl_attributes parse_attr load_class_for_meta );
@@ -57,19 +125,21 @@ sub for_class {
     my %args;
     for my $attr ( wsdl_attributes($meta) ) {
         my $attr_data = parse_attr( $attr );
-        my $attr_name = $attr_data->{name} || $attr_data->{ref};
+        my $attr_name = $attr_data->{name} ? $attr_data->{name} : $attr_data->{ref};
         if (my $ct = delete $attr_data->{complexType}) {
-            if ( $ct->{type} eq 'Class' and $data->{ $attr_name } ) {
-                my $class_name = $ct->{attr}->type_constraint->name;
-                load_class_for_meta( $class_name );
+            if ( $ct->{type} eq 'Class') {
+                if ( $data->{ $attr_name } ) {
+                    my $class_name = $ct->{attr}->type_constraint->name;
+                    load_class_for_meta( $class_name );
 
-                my $class_args = $self->for_class(
-                    $class_name,
-                    $data->{ $attr_name }
-                );
+                    my $class_args = $self->for_class(
+                        $class_name,
+                        $data->{ $attr_name }
+                    );
 
-                $args{ $attr_name } = $class_name->new( %$class_args);
-            } elsif ( $ct->{type} eq 'ArrayRef' ) {
+                    $args{ $attr_name } = $class_name->new( %$class_args);
+                };
+            } else { # $ct->{type} eq 'ArrayRef'
                 if ( my $acmeta = $ct->{defined_in}->{class}) {
                     my $class_name = $ct->{attr}->type_constraint->type_parameter->class;
                     load_class_for_meta( $class_name );
@@ -81,7 +151,7 @@ sub for_class {
                         );
                         push @{ $args{ $ct->{attr}->name } }, $class_name->new( %$class_args );
                     }
-                } elsif ( $ct->{defined_in}->{types_xs} ) {
+                } else { # $ct->{defined_in}->{types_xs}
                     $args{ $ct->{attr}->name } = [
                         map { $_->{$ct->{attr}->name} }
                         @{ $data->{ $attr_name } }
@@ -90,7 +160,7 @@ sub for_class {
             }
         } else {
             if ( $attr_data->{nillable} ) {
-                $args{ $attr_name } = $data->{ $attr_name } && $data->{ $attr_name } eq 'NIL'
+                $args{ $attr_name } = $data->{ $attr_name } eq 'NIL'
                     ? undef : $data->{ $attr_name };
             } elsif (exists $data->{ $attr_name }) {
                 $args{ $attr_name } = $data->{ $attr_name };
@@ -118,16 +188,17 @@ sub for_xml {
     my %args;
     for my $attr ( wsdl_attributes($meta) ) {
         my $attr_data = parse_attr( $attr );
-        my $attr_name = $attr_data->{name} || $attr_data->{ref};
+        my $attr_name = $attr_data->{name} ? $attr_data->{name} : $attr_data->{ref};
         my $obj_attr_name = $attr->name;
         if (my $ct = delete $attr_data->{complexType}) {
             if ( $ct->{type} eq 'Class') {
+
                 my $class_args = $self->for_xml(
                     $obj->$obj_attr_name()
                 ) if $obj->$obj_attr_name();
 
                 $args{ $attr_name } = $class_args;
-            } elsif ( $ct->{type} eq 'ArrayRef' ) {
+            } else { # $ct->{type} eq 'ArrayRef'
                 if ( my $acmeta = $ct->{defined_in}->{class}) {
                     for my $item ( @{ $obj->$obj_attr_name() } ) {
                         my $class_args = $self->for_xml(
@@ -138,11 +209,13 @@ sub for_xml {
                             $obj_attr_name => $class_args,
                         };
                     }
-                } elsif ( $ct->{defined_in}->{types_xs} ) {
+                } else { # $ct->{defined_in}->{types_xs}
                     my %opts = (
                         is => 'ro',
                         isa => $ct->{attr}->type_constraint->type_parameter->name,
                         required => $attr->is_required ? 1 : 0,
+                        xs_minOccurs => $ct->{attr}->{xs_minOccurs},
+                        xs_maxOccurs => $ct->{attr}->{xs_maxOccurs},
                     );
                     my $tmpattr = WSDL::Compile::Meta::Attribute::WSDL->new(
                         $ct->{attr}->name,
@@ -186,16 +259,22 @@ sub _nillable_attribute {
     return $value;
 }
 
+=head1 AUTHOR
+
+Alex J. G. Burzyński, C<< <ajgb at cpan.org> >>
+
+=head1 BUGS
+
+Please report any bugs or feature requests to C<bug-wsdl-compile at rt.cpan.org>, or through
+the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=WSDL-Compile>.  I will be notified, and then you'll
+automatically be notified of progress on your bug as I make changes.
+
 =head1 COPYRIGHT & LICENSE
 
 Copyright 2009 Alex J. G. Burzyński.
 
 This program is free software; you can redistribute it and/or modify it
-under the terms of either: the GNU General Public License as published
-by the Free Software Foundation; or the Artistic License.
-
-See http://dev.perl.org/licenses/ for more information.
-
+under the terms of the Artistic License.
 
 =cut
 

@@ -1,5 +1,12 @@
 Revision history for WSDL-Compile
 
-0.01    2009-07-24 11:34
+0.02    2009-12-27 14:44
+        Create tests with full coverage.
+
+0.01_2  2009-11-28 13:59
+        Switch to Module::Build.
+        Add example usage of WSDL::Compile::Serialize with XML::Compile::SOAP.
+
+0.01_1  2009-07-24 11:34
         First version.
 

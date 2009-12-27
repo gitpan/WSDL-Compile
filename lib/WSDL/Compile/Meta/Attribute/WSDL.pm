@@ -1,6 +1,6 @@
 package WSDL::Compile::Meta::Attribute::WSDL;
 
-=encoding utf-8
+=encoding utf8
 
 =head1 NAME
 
@@ -10,7 +10,7 @@ WSDL::Compile::Meta::Attribute::WSDL - metaclass for WSDL attributes
 
 use Moose;
 
-our $VERSION = '0.01_1';
+our $VERSION = '0.02';
 
 extends 'Moose::Meta::Attribute';
 
@@ -18,7 +18,7 @@ extends 'Moose::Meta::Attribute';
 
 =head2 xs_minOccurs
 
-xs:element attribute minOccurs. Defaults to 0
+xs:element attribute minOccurs. Defaults to 0.
 
 =cut
 
@@ -31,14 +31,14 @@ has 'xs_minOccurs' => (
 
 =head2 xs_maxOccurs
 
-xs:element attribute maxOccurs. Defaults to undef (unbounded)
+xs:element attribute maxOccurs. Defaults to 1.
 
 =cut
 
 has 'xs_maxOccurs' => (
     is => 'rw',
     isa => 'Maybe[Int]',
-    default => undef,
+    default => 1,
     predicate => 'has_xsmaxOccurs',
 );
 
@@ -86,16 +86,22 @@ package Moose::Meta::Attribute::Custom::WSDL;
 sub register_implementation {'WSDL::Compile::Meta::Attribute::WSDL'}
 
 
+=head1 AUTHOR
+
+Alex J. G. Burzyński, C<< <ajgb at cpan.org> >>
+
+=head1 BUGS
+
+Please report any bugs or feature requests to C<bug-wsdl-compile at rt.cpan.org>, or through
+the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=WSDL-Compile>.  I will be notified, and then you'll
+automatically be notified of progress on your bug as I make changes.
+
 =head1 COPYRIGHT & LICENSE
 
 Copyright 2009 Alex J. G. Burzyński.
 
 This program is free software; you can redistribute it and/or modify it
-under the terms of either: the GNU General Public License as published
-by the Free Software Foundation; or the Artistic License.
-
-See http://dev.perl.org/licenses/ for more information.
-
+under the terms of the Artistic License.
 
 =cut
 

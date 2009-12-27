@@ -1,6 +1,7 @@
 #!perl -T
 
-use Test::More tests => 3;
+use Test::More tests => 4;
+use Test::NoWarnings;
 
 BEGIN {
     use_ok( 'WSDL::Compile' );

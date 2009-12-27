@@ -1,28 +1,36 @@
---- #YAML:1.0
-name:               WSDL-Compile
-version:            0.01_1
-abstract:           Compile SOAP WSDL from your Moose classes.
+---
+name: WSDL-Compile
+version: 0.02
 author:
-    - Alex J. G. Burzyński <ajgb@cpan.org>
-license:            perl
-distribution_type:  module
-configure_requires:
-    ExtUtils::MakeMaker:  0
+  - 'Alex J. G. Burzyński <ajgb@cpan.org>'
+abstract: Compile SOAP WSDL from your Moose classes.
+license: perl
+resources:
+  license: http://dev.perl.org/licenses/
 build_requires:
-    ExtUtils::MakeMaker:  0
-requires:
-    Data::Dumper:         0
-    Moose:                0.93
-    MooseX::Types::XMLSchema:  0
-    Perl6::Junction:      1.40000
-    Test::More:           0
-    XML::Compile::SOAP:   2.08
-    XML::LibXML:          1.69
-no_index:
-    directory:
-        - t
-        - inc
-generated_by:       ExtUtils::MakeMaker version 6.54
+  Data::Dumper: 0
+  Moose: 0.93
+  MooseX::Types::XMLSchema: 0
+  Perl6::Junction: 1.40000
+  Test::More: 0
+  XML::Compile::SOAP: 2.08
+  XML::LibXML: 1.69
+provides:
+  Moose::Meta::Attribute::Custom::WSDL:
+    file: lib/WSDL/Compile/Meta/Attribute/WSDL.pm
+  WSDL::Compile:
+    file: lib/WSDL/Compile.pm
+    version: 0.02
+  WSDL::Compile::Meta::Attribute::WSDL:
+    file: lib/WSDL/Compile/Meta/Attribute/WSDL.pm
+    version: 0.02
+  WSDL::Compile::Serialize:
+    file: lib/WSDL/Compile/Serialize.pm
+    version: 0.02
+  WSDL::Compile::Utils:
+    file: lib/WSDL/Compile/Utils.pm
+    version: 0.02
+generated_by: Module::Build version 0.33
 meta-spec:
-    url:      http://module-build.sourceforge.net/META-spec-v1.4.html
-    version:  1.4
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4

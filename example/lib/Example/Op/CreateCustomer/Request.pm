@@ -59,6 +59,13 @@ has 'loaded' => (
     isa => 'Bool',
 );
 
+=head3 BUILD
+
+WSDL::Compile allows you to call your own methods - in this example just after
+$self was created.
+
+=cut
+
 sub BUILD {
     my $self = shift;
 

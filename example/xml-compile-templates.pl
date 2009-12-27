@@ -24,7 +24,7 @@ do {
     my $elem = $_;
     unless ($elem =~ /$tns/) {
         warn "skipping $elem...\n";
-        next;
+#        next;
     }
     print "======================\n";
     print $elem, "\n";

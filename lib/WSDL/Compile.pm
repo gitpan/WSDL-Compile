@@ -1,6 +1,6 @@
 package WSDL::Compile;
 
-=encoding utf-8
+=encoding utf8
 
 =head1 NAME
 
@@ -33,7 +33,7 @@ Please take a look at example/ directory for more details.
 
 use Moose;
 
-our $VERSION = '0.01_1';
+our $VERSION = '0.02';
 
 use Moose::Util::TypeConstraints qw( find_type_constraint );
 use XML::LibXML;
@@ -152,8 +152,7 @@ sub generate_wsdl {
         for my $action (qw/ Request Response Fault /) {
             my $class_action_name = $self->_op2class($class_name, $action);
 
-            my $meta = load_class_for_meta( $class_action_name )
-                or die "Unable to load $class_action_name";
+            my $meta = load_class_for_meta( $class_action_name );
             $self->_classes->{$class_name}->{$action} = $meta;
         };
     };
@@ -498,16 +497,16 @@ sub build_types {
     while (my ($name, $ctdef) = each %{$self->_complexTypes} ) {
         my $attr = $ctdef->{attr};
         delete $self->_complexTypes->{$name};
+        my $name_by_type_constraint = $name . " isa " . $attr->type_constraint->name;
         if (exists $seen{$name}) {
-            if (exists $seen_by_type_constraint{$name . " isa " . $attr->type_constraint->name } ) {
-                warn "Cannot redefine complex type " , $name , " which isa " , $attr->type_constraint->name ,": already defined; ",  " in ", $attr->associated_class->name;
+            if (exists $seen_by_type_constraint{$name_by_type_constraint} ) {
                 next;
             }
             die "Cannot redefine complex type " , $name , " as a " , $attr->type_constraint->name , "; conflicts with ", $seen{$name} , " in ", $attr->associated_class->name;
         }
         
         $seen{$name} = $name . " which isa " . $attr->type_constraint->name;
-        $seen_by_type_constraint{$name . " isa " . $attr->type_constraint->name } = 1;            
+        $seen_by_type_constraint{$name_by_type_constraint} = $attr->name;
 
         my $type = $xml->createElement('xs:element');
         $ctschema->appendChild( $type );
@@ -522,6 +521,8 @@ sub build_types {
                 is => 'ro',
                 isa => $attr->type_constraint->type_parameter->name,
                 required => $attr->is_required ? 1 : 0,
+                xs_minOccurs => $attr->xs_minOccurs,
+                xs_maxOccurs => $attr->xs_maxOccurs,
             );
             my $tmpattr = WSDL::Compile::Meta::Attribute::WSDL->new(
                 $attr->name,
@@ -537,8 +538,8 @@ sub build_types {
                 for sort keys %$attr_data;
 
             $seq->appendChild( $elem_attr );
-        } elsif ( my $meta = $ctdef->{defined_in}->{class} ) {
-            for my $attr ( wsdl_attributes($meta) ) {
+        } else { # $ctdef->{defined_in}->{class}
+            for my $attr ( wsdl_attributes($ctdef->{defined_in}->{class}) ) {
                 my $attr_data = parse_attr( $attr );
                 if (my $ct = delete $attr_data->{complexType}) {
                     $self->_complexTypes->{$ct->{name}} = $ct;
@@ -550,14 +551,11 @@ sub build_types {
 
                 $seq->appendChild( $elem_attr );
             }
-        } else {
-            die "don't know what to do";
         }
         keys %{$self->_complexTypes};
     };
 
     
-
     $self->_wsdl_types( $types );
 
 }
@@ -593,17 +591,23 @@ sub _op2class {
     );
 }
 
+=head1 AUTHOR
+
+Alex J. G. Burzyński, C<< <ajgb at cpan.org> >>
+
+=head1 BUGS
+
+Please report any bugs or feature requests to C<bug-wsdl-compile at rt.cpan.org>, or through
+the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=WSDL-Compile>.  I will be notified, and then you'll
+automatically be notified of progress on your bug as I make changes.
+
 
 =head1 COPYRIGHT & LICENSE
 
 Copyright 2009 Alex J. G. Burzyński.
 
 This program is free software; you can redistribute it and/or modify it
-under the terms of either: the GNU General Public License as published
-by the Free Software Foundation; or the Artistic License.
-
-See http://dev.perl.org/licenses/ for more information.
-
+under the terms of the Artistic License.
 
 =cut
 

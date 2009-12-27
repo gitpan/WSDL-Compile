@@ -1,6 +1,6 @@
 package WSDL::Compile::Utils;
 
-=encoding utf-8
+=encoding utf8
 
 =head1 NAME
 
@@ -12,7 +12,7 @@ L<WSDL::Compile::Serialize>
 use strict;
 use warnings;
 
-our $VERSION = '0.01_1';
+our $VERSION = '0.02';
 
 our (@ISA, @EXPORT_OK);
 BEGIN {
@@ -68,13 +68,22 @@ sub parse_attr {
 
     my %data;
     
-    $data{minOccurs} = $attr->has_xsminOccurs ? $attr->xs_minOccurs : 
-        $attr->is_required ? 1 : 0;
-    $data{maxOccurs} = $attr->has_xsmaxOccurs ?
-        defined $attr->xs_maxOccurs ? $attr->xs_maxOccurs : 'unbounded'
-        : 1;
-    $data{name} = $attr->has_xsname ? $attr->xs_name : $attr->name;
+    my $associated_class = $attr->associated_class ?
+        $attr->associated_class->name : 'unknown class';
+ 
+    $data{minOccurs} = $attr->xs_minOccurs;
+    die $attr->name, " is required - xs_minOccurs cannot be set to 0"
+        if $attr->is_required && $attr->xs_minOccurs == 0;
 
+    $data{maxOccurs} = defined $attr->xs_maxOccurs ? $attr->xs_maxOccurs : 'unbounded';
+
+    if ( $data{maxOccurs} ne 'unbounded' ) {
+        die "maxOccurs < minOccurs for ", $attr->name,
+            " in ", $associated_class
+                if $data{minOccurs} > $data{maxOccurs};
+    }
+    $data{name} = $attr->has_xsname ? $attr->xs_name : $attr->name;
+   
     my $tc = $attr->type_constraint;
     my $tc_orig = $tc;
     if ($tc->parent->name eq 'Maybe') {
@@ -83,9 +92,9 @@ sub parse_attr {
     }
 
     my $defined_in = $tc->_package_defined_in || '';
-    if ( $defined_in eq 'MooseX::Types::XMLSchema') {
-        die $attr->xs_ref, " is not supported for simple types for ", $attr->name,
-            " in ", $attr->associated_class->name, "\n"
+    if ( $defined_in eq 'MooseX::Types::XMLSchema' || $attr->has_xstype) {
+        die "xs_ref ", $attr->xs_ref, " is not supported for simple types for ", $attr->name,
+            " in ", $associated_class, "\n"
                 if $attr->has_xsref;
         $data{type} = $attr->has_xstype ? $attr->xs_type : $tc->name;
     } elsif ( ref $tc->parent eq 'Moose::Meta::TypeConstraint::Parameterizable' ) {
@@ -94,24 +103,23 @@ sub parse_attr {
             $tc = $tc->type_parameter->type_parameter;
         }
         die $tc_orig->name, " is not supported - cannot have nillable complex types for ",
-            $attr->name, " in ", $attr->associated_class->name
+            $attr->name, " in ", $associated_class
             if $data{nillable};
-        die $tc->name, " is not supported - please use ArrayRef with complexTypes for ", $attr->name,
-            " in ", $attr->associated_class->name, "\n"
-                if 'HashRef' eq any(
-                    $tc->parent->name,
-                    defined $tc->can('type_parameter') ? $tc->type_parameter->parent->name : '',
-                );
-        die $tc->parent->name, " is not supported for ", $attr->name,
-            " in ", $attr->associated_class->name, "\n"
-                if $tc_orig->parent->name ne 'ArrayRef';
-        die $tc->name, " is not supported without maxOccurs > 1 - please consider non-ArrayRef type in ", $attr->name,
-            " in ", $attr->associated_class->name, "\n"
-                if $data{maxOccurs} eq any(0, 1);
 
-        $data{maxOccurs} = $attr->has_xsmaxOccurs ?
-            defined $attr->xs_maxOccurs ? $attr->xs_maxOccurs : 'unbounded'
-            : 1;
+        die $tc_orig->name, " is not supported - please use ArrayRef or complex type instead of HashRef for ", $attr->name,
+            " in ", $associated_class, "\n"
+                if 'HashRef' eq any (
+                    $tc->parent->name,
+                    $tc_orig->parent->name,
+                    defined $tc->can('type_parameter') ? 
+                        (
+                            $tc->type_parameter->parent->name,
+                            $tc->type_parameter->name,
+                        ) : (),
+                );
+        die $tc_orig->name, " too deep nesting for ", $attr->name,
+            " in ", $associated_class, "\n"
+                if ref $tc eq 'Moose::Meta::TypeConstraint::Parameterizable';
 
         delete $data{name};
         $data{ref} = $attr->has_xsref ? $attr->xs_ref : 'ArrayOf'. ucfirst $attr->name;
@@ -129,12 +137,12 @@ sub parse_attr {
             $data{complexType}->{defined_in}->{types_xs} = 1;
         }
     } elsif (ref $tc eq 'Moose::Meta::TypeConstraint::Class') {
-        die "maxOccurs for class is not supported - please use",
+        die "maxOccurs other then 1 for class is not supported - please use",
             " ArrayRef[", $tc->name, "] in ", $attr->name,
-            " in ", $attr->associated_class->name, "\n"
+            " in ", $associated_class, "\n"
                 if $data{maxOccurs} ne '1';
         die $tc_orig->name, " is not supported - cannot have nillable complex types for ",
-            $attr->name, " in ", $attr->associated_class->name
+            $attr->name, " in ", $associated_class
             if $data{nillable};
 
         $data{ref} = delete $data{name};
@@ -148,8 +156,8 @@ sub parse_attr {
             $tc->class
         );
     } else {
-        die "Unknown attribute type ", $tc->name, " for ", $attr->name,
-            " in ", $attr->associated_class->name, "\n";
+        die "Unsupported attribute type ", $tc->name, " for ", $attr->name,
+            " in ", $associated_class, "\n"
     }
 
     return \%data;
@@ -187,11 +195,7 @@ automatically be notified of progress on your bug as I make changes.
 Copyright 2009 Alex J. G. Burzyński.
 
 This program is free software; you can redistribute it and/or modify it
-under the terms of either: the GNU General Public License as published
-by the Free Software Foundation; or the Artistic License.
-
-See http://dev.perl.org/licenses/ for more information.
-
+under the terms of the Artistic License.
 
 =cut
 
