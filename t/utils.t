@@ -562,20 +562,6 @@ is_deeply parse_attr( $attrs[-1] ), {
 }, "...and parsed attribute as expected";
 
 push @attrs, WSDL::Compile::Meta::Attribute::WSDL->new(
-    ct_with_maxoccurs => (
-        is => 'rw',
-        isa => 'WSDL::Compile::Test::CT::ComplexType',
-        xs_ref => "ct_with_maxoccurs",
-        xs_maxOccurs => undef,
-    ),
-);
-eval {
-    parse_attr( $attrs[-1] )
-};
-like $@, qr/maxOccurs other then 1 for class is not supported - please use/,
-    "ComplexTypes requires maxOccurs eq 1";
-
-push @attrs, WSDL::Compile::Meta::Attribute::WSDL->new(
     maybe_ct => (
         is => 'rw',
         isa => 'Maybe[WSDL::Compile::Test::CT::ComplexType]',
@@ -636,5 +622,5 @@ is_deeply parse_attr( $attrs[-1] ), {
 }, "...and parsed attribute as expected";
 
 
-done_testing( 54 );
+done_testing( 53 );
 

@@ -1,6 +1,6 @@
 ---
 name: WSDL-Compile
-version: 0.02
+version: 0.02.1
 author:
   - 'Alex J. G. Burzyński <ajgb@cpan.org>'
 abstract: Compile SOAP WSDL from your Moose classes.
@@ -9,10 +9,14 @@ resources:
   license: http://dev.perl.org/licenses/
 build_requires:
   Data::Dumper: 0
+  List::Util: 1.21
   Moose: 0.93
+  MooseX::Params::Validate: 0.12
   MooseX::Types::XMLSchema: 0
   Perl6::Junction: 1.40000
+  Test::Differences: 0
   Test::More: 0
+  Test::NoWarnings: 0
   XML::Compile::SOAP: 2.08
   XML::LibXML: 1.69
 provides:
@@ -20,7 +24,7 @@ provides:
     file: lib/WSDL/Compile/Meta/Attribute/WSDL.pm
   WSDL::Compile:
     file: lib/WSDL/Compile.pm
-    version: 0.02
+    version: 0.02.1
   WSDL::Compile::Meta::Attribute::WSDL:
     file: lib/WSDL/Compile/Meta/Attribute/WSDL.pm
     version: 0.02

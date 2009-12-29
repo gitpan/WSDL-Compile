@@ -8,6 +8,95 @@ WSDL::Compile - Compile SOAP WSDL from your Moose classes.
 
 =head1 SYNOPSIS
 
+    # Name of your WebService: Example
+    # Op stands for Operation
+    # Your method is CreateCustomer
+    #
+    # Request - what you expect to receive
+    package Example::Op::CreateCustomer::Request;
+    use Moose;
+    use MooseX::Types::XMLSchema qw( :all );
+    use WSDL::Compile::Meta::Attribute::WSDL;
+
+    has 'FirstName' => (
+        metaclass => 'WSDL',
+        is => 'rw',
+        isa => 'xs:string',
+        required => 1,
+        xs_minOccurs => 1,
+    );
+    has 'LastName' => (
+        metaclass => 'WSDL',
+        is => 'rw',
+        isa => 'xs:string',
+        required => 1,
+        xs_minOccurs => 1,
+    );
+    has 'Contacts' => (
+        metaclass => 'WSDL',
+        is => 'rw',
+        isa => 'ArrayRef[Example::CT::Contact]',
+        xs_maxOccurs => undef,
+    );
+
+    # Response - that's what will be sent back
+    package Example::Op::CreateCustomer::Response;
+    use Moose;
+    use MooseX::Types::XMLSchema qw( :all );
+    use WSDL::Compile::Meta::Attribute::WSDL;
+
+    has 'CustomerID' => (
+        metaclass => 'WSDL',
+        is => 'rw',
+        isa => 'xs:int',
+        required => 1,
+        xs_minOccurs => 1,
+    );
+
+    # Fault - class that defines faultdetails
+    package Example::Op::CreateCustomer::Fault;
+    use Moose;
+    use MooseX::Types::XMLSchema qw( :all );
+    use WSDL::Compile::Meta::Attribute::WSDL;
+
+    has 'Code' => (
+        metaclass => 'WSDL',
+        is => 'rw',
+        isa => 'xs:int',
+    );
+    has 'Description' => (
+        metaclass => 'WSDL',
+        is => 'rw',
+        isa => 'xs:string',
+    );
+
+    # CT stands for ComplexType
+    # So you can have more complex data structures
+    package Example::CT::Contact;
+    use Moose;
+    use MooseX::Types::XMLSchema qw( :all );
+    use WSDL::Compile::Meta::Attribute::WSDL;
+
+    has 'AddressLine1' => (
+        metaclass => 'WSDL',
+        is => 'rw',
+        isa => 'xs:string',
+    );
+    has 'AddressLine2' => (
+        metaclass => 'WSDL',
+        is => 'rw',
+        isa => 'Maybe[xs:string]',
+    );
+    has 'City' => (
+        metaclass => 'WSDL',
+        is => 'rw',
+        isa => 'xs:string',
+    );
+
+    # below could be put in a script
+    package main;
+    use strict;
+    use warnings;
     use WSDL::Compile;
 
     my $gen = WSDL::Compile->new(
@@ -27,13 +116,14 @@ WSDL::Compile - Compile SOAP WSDL from your Moose classes.
 
     print $wsdl;
 
-Please take a look at example/ directory for more details.
+
+Please take a look at example/ directory and/or tests for more details.
 
 =cut
 
 use Moose;
 
-our $VERSION = '0.02';
+our $VERSION = '0.02.1';
 
 use Moose::Util::TypeConstraints qw( find_type_constraint );
 use XML::LibXML;

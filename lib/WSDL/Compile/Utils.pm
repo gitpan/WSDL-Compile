@@ -137,10 +137,6 @@ sub parse_attr {
             $data{complexType}->{defined_in}->{types_xs} = 1;
         }
     } elsif (ref $tc eq 'Moose::Meta::TypeConstraint::Class') {
-        die "maxOccurs other then 1 for class is not supported - please use",
-            " ArrayRef[", $tc->name, "] in ", $attr->name,
-            " in ", $associated_class, "\n"
-                if $data{maxOccurs} ne '1';
         die $tc_orig->name, " is not supported - cannot have nillable complex types for ",
             $attr->name, " in ", $associated_class
             if $data{nillable};

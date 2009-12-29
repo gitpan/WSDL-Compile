@@ -1,5 +1,10 @@
 Revision history for WSDL-Compile
 
+0.02.1  2009-12-29 15:37
+        Add example usage in Synopsis
+        Fix support for ArrayRefs of ComplexTypes
+        Add missing required modules in Build.PL
+
 0.02    2009-12-27 14:44
         Create tests with full coverage.
 
