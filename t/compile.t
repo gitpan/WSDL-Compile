@@ -2,16 +2,11 @@
 use strict;
 use warnings;
 
-use Test::More;
+use Test::More tests => 13;
 use Test::NoWarnings;
 use Test::Exception;
 
 use lib qw( t/lib );
-
-use XML::LibXML;
-use XML::Compile::SOAP11;
-use XML::Compile::WSDL11;
-
 
 BEGIN {
     use_ok "WSDL::Compile";
@@ -49,10 +44,6 @@ lives_ok {
     $parser->parse_string( $wsdl );
 } "...and is a valid xml";
 
-lives_ok {
-    $xml_compile = XML::Compile::WSDL11->new($wsdl);
-} "...and accepted by XML::Compile::SOAP";
-
 # Test2
 lives_ok {
     $compile = WSDL::Compile->new(
@@ -80,11 +71,6 @@ lives_ok {
     $parser->parse_string( $wsdl );
 } "...and is a valid xml";
 
-lives_ok {
-    $xml_compile = XML::Compile::WSDL11->new($wsdl);
-} "...and accepted by XML::Compile::SOAP";
-
-
 # Test3
 lives_ok {
     $compile = WSDL::Compile->new(
@@ -106,6 +92,4 @@ isa_ok $compile, "WSDL::Compile", '$compile';
 dies_ok {
     $compile->generate_wsdl();
 } "...and WSDL fails with redefined attr";
-
-done_testing( 15 );
 

@@ -4,15 +4,14 @@ package WSDL::Compile::Utils;
 
 =head1 NAME
 
-WSDL::Compile::Utils - functions used by L<WSDL::Compile> and
-L<WSDL::Compile::Serialize> 
+WSDL::Compile::Utils - functions used by L<WSDL::Compile>.
 
 =cut
 
 use strict;
 use warnings;
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 our (@ISA, @EXPORT_OK);
 BEGIN {

@@ -2,13 +2,12 @@
 use strict;
 use warnings;
 
-use Test::More;
+use Test::More tests => 53;
 use Test::NoWarnings;
 use Test::Exception;
 use Test::Differences;
 
 
-use Data::Dumper;$Data::Dumper::Indent=1;
 use MooseX::Types::XMLSchema qw( :all );
 use WSDL::Compile::Meta::Attribute::WSDL;
 use Moose::Meta::Class;
@@ -104,7 +103,7 @@ Moose::Meta::Class->create(
 );
 
 
-diag "load_class_for_meta";
+#diag "load_class_for_meta";
 my $meta_req;
 lives_ok {
     $meta_req = load_class_for_meta('WSDL::Compile::Test::Op::Example::Request');
@@ -122,7 +121,7 @@ eval {
 };
 like $@, qr/Can't locate .* in \@INC/, "load_class_for_meta dies for non existent class";
 
-diag "wsdl_attributes";
+#diag "wsdl_attributes";
 my @expected_wsdl_attrs_order = qw(
     wsdl_attr_regular_isa_1
     wsdl_attr_xs_isa_1
@@ -140,7 +139,7 @@ isa_ok  $_, 'WSDL::Compile::Meta::Attribute::WSDL',
 is_deeply [ map { $_->name } @wsdl_attr ], \@expected_wsdl_attrs_order,
     "attributes returned in insertion order";
 
-diag "parse_attr";
+#diag "parse_attr";
 
 my %expected_parsed_attr = (
     wsdl_attr_regular_isa_1 => {
@@ -621,6 +620,4 @@ is_deeply parse_attr( $attrs[-1] ), {
     },
 }, "...and parsed attribute as expected";
 
-
-done_testing( 53 );
 

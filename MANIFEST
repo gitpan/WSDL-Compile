@@ -5,16 +5,10 @@ Build.PL
 Makefile.PL
 META.yml
 lib/WSDL/Compile.pm
-lib/WSDL/Compile/Serialize.pm
 lib/WSDL/Compile/Utils.pm
 lib/WSDL/Compile/Meta/Attribute/WSDL.pm
 example/Example.wsdl
 example/recreate.sh
-example/serialize_request.pl
-example/serialize_response.pl
-example/serialize_xml_compile.pl
-example/xml-compile-templates.pl
-example/wsdl.templates
 example/wsdl_generator.pl
 example/lib/Example/Op/CreateCustomer/Request.pm
 example/lib/Example/Op/CreateCustomer/Response.pm
@@ -38,5 +32,4 @@ t/lib/WSDL/Compile/Test3/Op/Example/Fault.pm
 t/lib/WSDL/Compile/Test3/Op/Example/Request.pm
 t/lib/WSDL/Compile/Test3/Op/Example/Response.pm
 t/metaclass_wsdl.t
-t/serialize.t
 t/utils.t

@@ -123,7 +123,7 @@ Please take a look at example/ directory and/or tests for more details.
 
 use Moose;
 
-our $VERSION = '0.02.1';
+our $VERSION = '0.03';
 
 use Moose::Util::TypeConstraints qw( find_type_constraint );
 use XML::LibXML;

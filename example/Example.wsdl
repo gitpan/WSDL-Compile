@@ -56,7 +56,7 @@
       <xs:element name="ArrayOfContacts">
         <xs:complexType>
           <xs:sequence>
-            <xs:element maxOccurs="1" minOccurs="0" ref="Contacts"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" ref="Contacts"/>
           </xs:sequence>
         </xs:complexType>
       </xs:element>
@@ -72,14 +72,14 @@
       <xs:element name="ArrayOfCustomerID">
         <xs:complexType>
           <xs:sequence>
-            <xs:element maxOccurs="1" minOccurs="0" name="CustomerID" type="xs:string"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="CustomerID" type="xs:string"/>
           </xs:sequence>
         </xs:complexType>
       </xs:element>
       <xs:element name="ArrayOfCustomerType">
         <xs:complexType>
           <xs:sequence>
-            <xs:element maxOccurs="1" minOccurs="0" name="CustomerType" nillable="true" type="xs:string"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="CustomerType" nillable="true" type="xs:string"/>
           </xs:sequence>
         </xs:complexType>
       </xs:element>

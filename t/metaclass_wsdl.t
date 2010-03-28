@@ -2,12 +2,10 @@
 use strict;
 use warnings;
 
-use Test::More;
+use Test::More tests => 3;
 use Test::NoWarnings;
 use Test::Exception;
 use Test::Differences;
-
-use Data::Dumper;$Data::Dumper::Indent=1;
 
 BEGIN {
     use_ok "WSDL::Compile::Meta::Attribute::WSDL";
@@ -26,5 +24,8 @@ BEGIN {
     no Moose;
 }
 
-done_testing( 2 );
-
+lives_ok {
+    my $obj = WSDL::Compile::Example::Class->new(
+        wsdl_attr_1 => 'example',
+    );
+} "object with metaclass attribute created";
